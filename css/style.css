@@ -245,7 +245,7 @@ body{
 
 .root{
 	height: 100%;
-	background: #fff;
+	/*background: #fff;*/
 	position: relative;
 	overflow: hidden;
 }
@@ -544,16 +544,11 @@ body{
 	/*width: 2.685rem;
 	margin-left: 0.13rem;
 	margin-top: 0.12rem;*/
-	position: absolute;
-	top: 0.38rem;
-	left: 0.21rem;
-	width: 2.8rem;
-	border-radius: 0.1rem;
 }
 .res_bottom .tv img.video_box{
-	position: absolute;
+	/*position: absolute;
 	top: 0;
-	left: 0;
+	left: 0;*/
 }
 .res_bottom .tv .video{
 	position: absolute;
@@ -567,8 +562,8 @@ body{
 	height: 0.5rem;
 	border-radius: 0.25rem;
 	position: absolute;
-	left: 1.4rem;
-    top: 0.9rem;
+	left: 1.2rem;
+    top: 0.8rem;
 	background: rgba(0,0,0,0.5);
 	z-index: 100;
 	display: flex;
@@ -580,16 +575,11 @@ body{
 	height: 0.3rem;
 }
 .res_bottom .tv .video_preview{
-	/*width: 2.685rem;
-	
+	width: 2.685rem;
+	height: 1.925rem;
 	left: 0.13rem;
-	top: 0.12rem;*/
+	top: 0.12rem;
 	position: absolute;
-	top: 0.38rem;
-	left: 0.21rem;
-	width: 2.8rem;
-	height: 1.5488rem;
-	border-radius: 0.1rem;
 }
 .res_bottom .tv .touzi_res_bg{
 	width: 2.7rem;
