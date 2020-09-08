@@ -1,0 +1,188 @@
+.q_bg_box {
+	width: 100%;
+	height: 100%;
+	/*padding-top: 0.475rem;*/
+	background: #eeeee8;
+}
+.q_bg {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background: url(../img/q_bg.gif) no-repeat 100% center/3.75rem 6.025rem;
+}
+.q_content {
+	position: absolute;
+	top: 50%;
+    margin-top: -1rem;
+	margin-left: 1rem;
+	display: none;
+}
+.q_content_active {
+	display: block;
+}
+.q_content .q_index {
+	margin-left: 0.05rem;
+	background-color: #a90d2c;
+	color: #ffffff;
+	width: 0.425rem;
+	height: 0.19rem;
+	line-height: 0.19rem;
+	font-size: 0.16rem;
+	padding-left: 0.08rem;
+	font-weight: bold;
+}
+.q_content .q_q1_m {
+	display: none;
+	margin-top: 0.12rem;
+	width: 1.78rem;
+	height: 1.535rem;
+	background: url(../img/q1_m.png) no-repeat 100% top/1.78rem 1.535rem;
+}
+.q_content .q_q1_f {
+	display: none;
+	margin-top: 0.12rem;
+	width: 1.78rem;
+	height: 1.535rem;
+	background: url(../img/q1_f.png) no-repeat 100% top/1.78rem 1.535rem;
+}
+
+.q_content .active {
+	display: block;
+}
+.q_content .q_q2 {
+	margin-top: 0.12rem;
+	width: 1.78rem;
+	height: 1.535rem;
+	background: url(../img/q2.png) no-repeat 100% top/1.78rem 1.535rem;
+}
+.q_content .q_q3 {
+	margin-top: 0.12rem;
+	width: 1.78rem;
+	height: 1.535rem;
+	background: url(../img/q3.png) no-repeat 100% top/1.78rem 1.535rem;
+}
+.q_content .q_q4 {
+	margin-top: 0.12rem;
+	width: 1.78rem;
+	height: 1.535rem;
+	background: url(../img/q4.png) no-repeat 100% top/1.78rem 1.535rem;
+}
+.q_content .q_q5 {
+	margin-top: 0.12rem;
+	width: 1.78rem;
+	height: 1.535rem;
+	background: url(../img/q5.png) no-repeat 100% top/1.78rem 1.535rem;
+}
+.q_content .q_q6 {
+	margin-top: 0.12rem;
+	width: 1.78rem;
+	height: 1.535rem;
+	background: url(../img/q6.png) no-repeat 100% top/1.78rem 1.535rem;
+}
+.q_content .q_an_box {
+	display: flex;
+	display: -webkit-flex;
+	margin-top: 0.18rem;
+}
+.q_content .q_an_box .q_an {
+	width:0.395rem;
+	height: 0.275rem;
+	line-height: 0.275rem;
+	text-align: center;
+	background: url(../img/q_index.png) no-repeat 100% top/0.395rem 0.275rem;
+	margin-left: 0.07rem;
+	color: #a90d2c;
+}
+.q_content .q_an_box .q_an.active{
+	background: url(../img/q_index_active.png) no-repeat 100% top/0.395rem 0.275rem;
+	color: #ffffff;
+}
+.q_content .q_an_box .q_an:first-child {
+	margin-left: 0rem;
+}
+
+.page_3{
+	background: #ffede8;
+}
+.input_bg_box{
+	width: 100%;
+	height: 6.02rem;
+	padding-top: 4rem;
+	box-sizing: border-box;
+	/*background: url(../img/input_bg.png) no-repeat 100% 100%/3.75rem;*/
+	background: url(../img/input_bg.gif) no-repeat center 0 / 3.75rem;
+	top: 50%;
+	transform: translate(0, -50%);
+	position: absolute;
+}
+.input_bg {
+	width: 100%;
+}
+.heart{
+	animation: heart 1.3s ease-in-out 2.7s infinite alternate;
+}
+
+@keyframes heart{
+	from{margin-top:0px;}
+	to{margin-top:-6px;}
+}
+from{
+	transform:translate(0,0)
+}
+to{
+	transform:translate(0,6px)
+}
+.input_bg .input_words{
+	animation: heart 1.3s ease-in-out 0s infinite alternate;
+	position: relative;
+	width: 1.25rem;
+	height: 1.92rem;
+	left: 50%;
+    margin-left: -0.625rem;
+	background: url(../img/input_words.png) no-repeat 0 0/1.25rem 1.92rem;
+}
+.input_box{
+	/*height: 2.8rem;*/
+	width: 100%;
+	text-align: center;
+	/*bottom: 0;*/
+	/*left: 50%;*/
+	/*transform: translate(-50%, 0);*/
+	/*position: absolute;*/
+	/*margin-left: -1.425rem;*/
+}
+.input_box input{
+	padding-left: 0.1rem;
+	font-size: 0.18rem;
+	color:#a90d2c;
+	border: 1px solid #a90d2c;
+	display: block;
+	width: 2.85rem;
+	height: 0.45rem;
+	line-height: 0.45rem;
+	box-sizing: border-box;
+	background: #fff8f6;
+	outline: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+.input_box input::-webkit-input-placeholder {
+	font-size: 0.18rem;
+	color:#a90d2c;
+}
+.input_margin{
+	margin-top: 0.13rem;
+}
+.input_btn{
+	text-align: center;
+	width: 2.81rem;
+	height: 0.45rem;
+	line-height: 0.45rem;
+    color: #a90d2c;
+    font-size: .2rem;
+    background: #ffe3dc;
+    display: inline-block;
+    border: 0.015rem solid #a90d2c;
+    box-shadow: 0.03rem 0.03rem 0 #a90d2c, 0.02rem 0.02rem 0 #a90d2c, 0.01rem 0.01rem 0 #a90d2c;
+}
+

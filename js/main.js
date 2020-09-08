@@ -1,0 +1,560 @@
+//数组去重方法
+Array.prototype.unique = function()
+{
+	var n = {},r=[]; //n为hash表，r为临时数组
+	for(var i = 0; i < this.length; i++) //遍历当前数组
+	{
+		if (!n[this[i]]) //如果hash表中没有当前项
+		{
+			n[this[i]] = true; //存入hash表
+			r.push(this[i]); //把当前数组的当前项push到临时数组里面
+		}
+	}
+	return r;
+}
+
+//电话号码校验
+function checkPhone(phone){
+	if(!(/^1[23456789]\d{9}$/.test(phone))){
+		return false;
+	}
+	return true;
+}
+
+//邮箱校验
+function checkEmail(email){
+	if(!(/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(email))){
+		return false;
+	}
+	return true;
+}
+
+$(function(){
+	//解决键盘收起后页面不下沉的bug
+	$('input[type="text"], input[type="number"]')
+		.blur(function(){
+			setTimeout(function(){
+				var jFocused = $(':focus');
+				//去除掉点击其他input丧失焦点的情况
+				if(!jFocused.length){
+					window.scroll(0,0);
+				}
+			})
+		})
+})
+
+var hnhDataOri = {
+	name: null,
+	sex: '', // male,female
+	age: null,
+	answer: []
+}
+
+var hnhData = JSON.parse(JSON.stringify(hnhDataOri))
+
+//加载方法
+var page_load = {
+	ancestor: null, // 大dom
+	wrapper: null, // 临时图片存放dom
+	target: null, // 显示百分数的dom
+	delayTime: 0*1000, // 最少加载完所需时间 // kn todo
+	delayed: false, // 是否超过最少加载完所需时间
+	imgCount: 0, // 图片总数
+	loadedCount: 0, // 已加载完成数
+	jAniBlock: null,
+	jRunImg: null,
+	runImgHref: './img/loading_done.png',
+	init: function(){
+		this.ancestor = $('#landing_load')
+		this.wrapper = $('#img_wrapper')
+		this.jAniBlock = $('#loading_animation_block')
+		this.jRunImg = $('#loading_run_img')
+
+		this.bind()
+	},
+	bind: function(){
+		var self = this
+
+		this.getImg()
+		this.timeout()
+	},
+	getImg: function(){
+		var self = this,
+			html = ''
+
+		$('body *')
+			.each(function(i){
+				var oThis = $(this),
+					tagName = 'img',
+					src = '',
+					handler='onload',
+					backgroundImage = oThis.css('backgroundImage').replace('url(','').replace(')','')
+
+				if(oThis[0].tagName == 'IMG' && oThis.attr('src')){
+					src = oThis.attr('src')
+				}else if(oThis[0].tagName == 'AUDIO' && oThis.attr('src')){
+					tagName = 'audio'
+					handler = 'oncanplay'
+					src = oThis.attr('src')
+				}else if(backgroundImage != 'none'){
+					src = backgroundImage
+				}
+
+				if(!src)return true
+
+				self.imgCount ++
+				html += '<'+tagName+' src='+src+' alt="" '+handler+'="page_load.loaded()" onerror="page_load.error(this)" />'
+			})
+
+		self.wrapper.html(html)
+	},
+	timeout: function(){
+		var self = this
+
+		setTimeout(function(){
+			self.delayed = true
+
+			if(self.loadedCount >= self.imgCount){
+				self.loaded()
+			}
+		}, self.delayTime)
+	},
+	error: function(e){
+		var self = this
+
+		self.loadedCount ++
+		self.done()
+	},
+	loaded: function(){
+		var self = this
+
+		self.loadedCount ++
+		self.done()
+	},
+	done: function(){
+		var self = this
+
+		if(self.loadedCount >= self.imgCount){
+			if(!self.delayed){
+				return false
+			}
+
+			self.jAniBlock.css('left', '100%')
+			self.jRunImg
+				.attr('src', self.runImgHref)
+				.addClass('done')
+
+			// 播放庆祝音乐
+			audio.play('#enter')
+
+			// return; // kn
+
+			setTimeout(function(){
+				self.ancestor
+					.addClass('hidden')
+					.next()
+					.addClass('current')
+
+				self.wrapper.remove()
+			}, 0.5*1000)
+		}else{
+			var percent = parseInt(100*self.loadedCount/self.imgCount);
+
+			self.jAniBlock.css('left', percent+'%')
+			$('#debugger').html(percent)
+		}
+	}
+}
+// page_load.init()
+
+//提示信息
+var message = {
+	dom: $('#message'),
+	time: 3*1000,
+	timeout: null,
+	filter: function(msg){
+		var self = this,
+			msgType = Object.prototype.toString.call(msg);
+
+		if(msgType == "[object String]"){
+			return msg
+		}else if(msgType == "[object Array]"){
+			return msg[0]
+		}else if(msgType == "[object Object]"){
+			return Object.values(msg)[0]
+		}
+	},
+	do: function(msg, type){
+		var self = this
+
+		self.dom
+			.find('.text')
+			.html(msg)
+			.end()
+			.attr('data-type', type)
+			.addClass('show')
+
+		clearTimeout(self.timeout)
+
+		self.timeout = setTimeout(function(){
+			self.dom.removeClass('show')
+		}, self.time)
+	},
+	error: function(msg){
+		var self = this
+
+		self.do(self.filter(msg), 'error')
+	},
+	success: function(msg){
+		var self = this
+
+		self.do(self.filter(msg), 'success')
+	},
+	info: function(msg){
+		var self = this
+
+		self.do(self.filter(msg), 'info')
+	}
+}
+
+//黑色弹窗
+var modal = {
+	dom: $('#modal'),
+	time: 0,
+	timeout: null,
+	filter: function(msg){
+		var self = this,
+			msgType = Object.prototype.toString.call(msg);
+
+		if(msgType == "[object String]"){
+			return msg
+		}else if(msgType == "[object Array]"){
+			return msg[0]
+		}else if(msgType == "[object Object]"){
+			return Object.values(msg)[0]
+		}
+	},
+	show: function(msg){
+		var self = this
+
+		self.dom
+			.find('.text')
+			.html(msg)
+			.end()
+			.addClass('show')
+	},
+	close: function(){
+		var self = this
+
+		self.dom
+			.removeClass('show')
+			.find('.text')
+			.html('')
+	}
+}
+
+// 音频
+var audio = {
+	play: function(target){
+		var self = this,
+			oriObj = $(target)[0]
+
+		var promise = oriObj.play();
+
+		if (promise !== undefined) {
+			promise.then(_ => {
+				// Autoplay started!
+			}).catch(error => {
+				// Autoplay was prevented.
+				// Show a "Play" button so that user can start playback.
+			});
+		}
+		// console.log('播放：'+target)
+	},
+	pause: function(target){
+		var self = this,
+			oriObj = $(target)[0]
+
+		oriObj.pause()
+		// console.log('暂停：'+target)
+	},
+	toggle: function(target){
+		var self = this,
+			oriObj = $(target)[0]
+
+		if(oriObj.paused){
+			oriObj.play()
+		}else{
+			oriObj.pause()
+		}
+
+		// console.log('paused', oriObj.paused)
+	}
+}
+
+
+//页面切换方法
+var page = {
+	prev: 0,
+	current: 0,
+	page: null,
+	track: [],
+	init: function(){
+		var self = this
+		this.page = $('.page')
+
+		this.bind()
+		console.log('init');
+
+		//测试用，去到哪页填哪页
+		// this.go2(1)
+		// setTimeout(function(){
+		// 	self.go2(5)
+		// }, 2*1000)
+	},
+	bind: function(){
+		var self = this;
+	},
+	//去特定页
+	//第二个参数className为去到目的页后给目的页添加一个特定class，暂时未用到，写上以备不时之需
+	go2: function(i, cb){
+		var self = this,
+			bPrev = i > this.prev ? false : true
+
+		if(i < 0){
+			i = 0
+		}
+
+		if(i == self.current){
+			return false
+		}
+
+		this.page
+			.removeClass('current')
+
+		$('#page_'+i)
+			.addClass('current')
+
+		this.prev = i >= this.current ? this.current : i - 1
+		this.current = i
+
+	},
+	//上一页
+	prev: function(cb){
+		var self = this
+
+		this.go2(self.prev, cb)
+	},
+	//下一页
+	next: function(cb){
+		var self = this
+
+		this.go2(self.current+1, cb)
+	}
+}
+page.init();
+
+var main = {
+	num: 6,
+	count: 0,
+	eventtxt: {
+		'0': {
+			txt: '你居然触发了过关格！那就让这个欧气鉴定器来测测你的属性，器来！',
+			url: 'https://imgs.it2048.cn/sw4/01-transcode.mp4'
+		},
+		'6': {
+			txt: '今天你参加了点钞比赛，听说只要赢得比赛就能拿到【欧洲玄学大法】。路人A不知为什么一直干扰你，最终你以1张的失误惜败于对手。',
+			url: 'https://imgs.it2048.cn/sw4/02-transcode.mp4'
+		},
+		'10': {
+			txt: '你的对手对你使出了一招【天降正义】，以迅雷不及掩耳之势从你身边掠过。等你回过神时，发现自己脸上挂满了夹子，脸肿得和馒头一样大，只好去医院就医休息一天。',
+			url: 'https://imgs.it2048.cn/sw4/03-transcode.mp4'
+		},
+		'12': {
+			txt: '某天清晨醒来，你发现自己的头发竟然全部消失了！医生告诉你这是秃头症。伤心之余，你只好购买了医生推荐的植发套餐。',
+			url: 'https://imgs.it2048.cn/sw4/04-transcode.mp4'
+		},
+		'8': {
+			txt: '买菜结账时，收银员欣喜的告诉你，你获得了友谊天长地久短袖一件。虽然你极力拒绝，但是店员仍旧强行把你和你的朋友套在了一起。',
+			url: 'https://imgs.it2048.cn/sw4/05-transcode.mp4'
+		},
+		'2': {
+			txt: '公司团建，领导提议玩一个【鞋底撕名牌】的小游戏。面对强壮的你，小姐姐对你抛去了媚眼。你笑了笑，把她的脚抓得更紧了。最后，在她复杂的眼神里，你脱下她的鞋赢得了胜利。',
+			url: 'https://imgs.it2048.cn/sw4/06-transcode.mp4'
+		},
+		'1': {
+			txt: '你和妹妹一起参加【顶梁柱】比赛，你决定和妹妹合作一起通关。结果在抱起妹妹时，你的身体感受到一种超负荷的能量，成功闪了腰。你们只好中止比赛，去医院看病。',
+			url: 'https://imgs.it2048.cn/sw4/07-transcode.mp4'
+		},
+		'3': {
+			txt: '朋友买了新款的撕腿毛神器，趁你不备先在你腿上试验了一下。你瞬间痛到两眼发黑，随后从朋友手里夺过神器，把朋友的汗毛撕了下来。听着朋友的惨叫，你慢悠悠的说，“这场游戏，没有赢家。”',
+			url: 'https://imgs.it2048.cn/sw4/08-transcode.mp4'
+		},
+		'24': {
+			txt: '你抽奖中了《神武4真好玩》综艺的嘉宾资格，在兴高采烈的上了节目5分钟，却因为回答过于生硬，在场的工作人员无一能接，最终拍摄中止。',
+			url: 'https://imgs.it2048.cn/sw4/09-transcode.mp4'
+		},
+		'18': {
+			txt: '你参加了一场绘画比赛，却在不知不觉中睡着了。等到醒来的时候，离交卷只剩5分钟了。于是你急中生智，拿出保鲜膜套在画框上，用脸用力的穿过了保鲜膜，成为了冠军！',
+			url: 'https://imgs.it2048.cn/sw4/10-transcode.mp4'
+		},
+	},
+	event: {
+		'1': {
+			upper: 2,
+			type: ['youxi', 'shijian']
+		},
+		'2': {
+			upper: 2,
+			type: ['youxi', 'jiangli']
+		},
+		'4': {
+			upper: 0,
+			type: ['shijian']
+		},
+		'5': {
+			upper: 0,
+			type: ['chengfa']
+		},
+		'6': {
+			upper: 3,
+			type: ['youxi', 'shijian', 'jiangli']
+		}
+
+	},
+	typeVal: {
+		youxi: 1,
+		chengfa: 2,
+		shijian: 3,
+		jiangli: 4
+	},
+	typeName: {
+		youxi: '游戏',
+		chengfa: '惩罚',
+		shijian: '事件',
+		jiangli: '奖励'
+	},
+	init: function () {
+		this.bind();
+	},
+	bind: function () {
+		var self = this;
+		$('.home_ctrl').on('click', function () {
+			page.go2(1);
+			self.initModel();
+		});
+		$('.model_item').on('click', function () {
+			$('.model_item').removeClass('current');
+			var $next = $(this).next();
+			if ($next.length > 0) {
+				$next.addClass('current');
+			} else {
+				self.closeModel();
+			}
+		});
+		$('.touzi_pause').on('click', function () {
+			self.palyTouzi();
+		});
+		$('.play_btn').on('click', function () {
+			var video = document.getElementById('res_video');
+			video.play();
+			setTimeout(function () {
+				$('.video_preview').hide();
+			},1000)
+		});
+		$('.res_icon').on('click', function () {
+			if($(this).hasClass('go')){
+
+			}else{
+				$('.touzi_pause').show();
+				$('.touzi_play').hide();
+				page.go2(1);
+			}
+		})
+	},
+	palyTouzi: function () {
+		var self = this;
+		$('.touzi_pause').hide();
+		$('.touzi_play').show();
+		// var video = document.getElementById('res_video');
+		// video.pause();
+		setTimeout(function () {
+			if (self.count == 9) {
+				self.num = '' + 3;
+			}else{
+				self.num = '' + (Math.floor(Math.random() * (6 - 1 + 1)) + 1);
+			}
+			
+			if(self.num == '3'){
+				$('#res_title').html('扔出 3 点，哇了不起了不起！')
+				$('#res_content').html(self.eventtxt['0'].txt);
+				$('#res_video').attr('src', self.eventtxt['0'].url);
+				// self.changeVideo(self.eventtxt['0'].url)
+				$('.res_bg').attr('src', 'image/res_bg2.gif');
+				$('.touzi_res_img').attr('src', `image/dian/${self.num}.png`);
+				$('.res_box .title').removeClass('fail').addClass('ok');
+				$('.res_box_title').attr('src', 'image/perfect.png');
+				$('.res_icon_btn').attr('src', 'image/go.png');
+				$('.res_icon').removeClass('again').addClass('go');
+			} else {
+				var typeUpper = self.event[self.num].upper;
+				if(typeUpper == 0){
+					var type = self.event[self.num].type[0]
+				}else {
+					var typeIndex = Math.floor(Math.random() * (typeUpper - 1 + 1)) + 1;
+					var type = self.event[self.num].type[typeIndex-1];
+					console.log('typeIndex----', typeIndex);
+					
+				}
+				var eventTxtIndex = '' + (self.typeVal[type] * Number(self.num));
+				console.log('type----', type);
+				console.log('eventTxtIndex----', self.eventtxt[eventTxtIndex]);
+				self.count++;
+				$('#res_title').html(`扔出 ${self.num} 点，进入${self.typeName[type]}格`)
+				$('#res_content').html(self.eventtxt[eventTxtIndex].txt);
+				// $('#res_video').attr('src', self.eventtxt[eventTxtIndex].url);
+				self.changeVideo(self.eventtxt[eventTxtIndex].url);
+				$('.res_bg').attr('src', 'image/res_bg1.png');
+				$('.touzi_res_img').attr('src', `image/dian/${self.num}.png`);
+				$('.res_box .title').removeClass('ok').addClass('fail');
+				$('.res_box_title').attr('src', 'image/good_job.png');
+				$('.res_icon_btn').attr('src', 'image/again.png');
+				$('.res_icon').addClass('again').removeClass('go');
+				$('.time span').html(10 - self.count);
+			}
+			page.go2(2)
+			// 游戏格 6 2 1 youxi 6, 2, 1
+			// 惩罚格 5 chengfa 10
+			// 事件格 4 1 6 shijian 12, 3, 18
+			// 奖励格 2 6 jiangli 8, 24
+		}, 5000)
+	},
+	changeVideo: function (url) {
+		var v = $(`<video 
+                        id="res_video" 
+                        src="${url}"
+                        preload 
+                        x5-video-player-type="h5-page" 
+                        width="100%"
+                        preload>
+                    </video>`);
+		$('.video_body').append(v);
+	},
+	creatRes: function () {
+		
+	},
+	initModel: function () {
+		var hasShowModel = localStorage.getItem('ouhuang_model');
+		if(!hasShowModel || hasShowModel != 'show'){
+			$('.model_item').removeClass('current');
+			$('.model_item').eq(0).addClass('current');
+			$('.model').show();
+			localStorage.setItem('ouhuang_model','show');
+		}
+	},
+	closeModel: function () {
+		$('.model').hide();
+	}
+}
+main.init();
+
