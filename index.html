@@ -9,22 +9,19 @@
     <meta name="screen-orientation" content="portrait">
     <!-- QQ/微信强制竖屏 -->
     <meta name="x5-orientation" content="portrait">
-    <title>欧皇</title>
-    <meta name="description" content="欧皇">
-    <meta name="keywords" content="欧皇">
-    <meta name="wxm:timeline_title" content="欧皇">
-    <meta name="wxm:appmessage_title" content="欧皇">
-    <meta name="wxm:appmessage_desc" content="欧皇">
-    <!-- 分享缩略图，必须为绝对路径，且图片链接必须为http协议（由于安卓微信客户端无法获取https的分享图片，仅此处需要强制http协议）-->
-    <meta name="wxm:img_url" content="http://nbafans.act.qq.com/ibm/img/wx.jpg">
-    <!-- 分享链接-->
-    <!-- <meta name="wxm:link" content="http://nbafans.act.qq.com/ibm/"> -->
+    <title>【神武4真好玩】目标是成为真正的欧皇！</title>
+    <meta name="description" content="【神武4真好玩】目标是成为真正的欧皇！">
+    <meta name="keywords" content="【神武4真好玩】目标是成为真正的欧皇！">
+    <meta name="wxm:timeline_title" content="【神武4真好玩】目标是成为真正的欧皇！">
+    <meta name="wxm:appmessage_title" content="【神武4真好玩】目标是成为真正的欧皇！">
+    <meta name="wxm:appmessage_desc" content="【神武4真好玩】目标是成为真正的欧皇！">
     <link rel="stylesheet" href="./css/style.css?v=0.58" media="all">
     <script>
     var ratio = 187.5;
     if(window.orientation==90||window.orientation==-90) ratio = 333.5
     document.querySelector('html').style.fontSize = document.documentElement.clientWidth / ratio * 50 + 'px';
     </script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 </head>
 
 <body>
@@ -122,7 +119,9 @@
 
                     <!-- <img class="video_preview" src="image/preview.jpg" alt=""> -->
                     <img class="video_box" src="image/video_box.png" alt="">
-                    <iframe class="video" src="//player.bilibili.com/player.html?aid=839524222&bvid=BV1F54y1m7tW&cid=233514135&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+                    <div class="video_box">
+                        <iframe class="video" src="//player.bilibili.com/player.html?aid=839524222&bvid=BV1F54y1m7tW&cid=233514135&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+                    </div>
                     <div class="touzi_res_bg">
                         <img src="image/girl.gif" alt="">
                     </div>
@@ -138,6 +137,30 @@
             </div>
         </div>
     </div>
+    <div class="page page_3" id="page_3">
+        <div class="res_panel">
+            <div class="title"><img class="title_type" src="image/ouqi.png" alt=""></div>
+            <div class="des xinyunse">白\蓝\红</div>
+            <div class="des yi">撞桃花 肝日常 抓捕妖怪</div>
+            <div class="des chenghao">【欧皇】</div>
+            <div class="des liwu">【价值一千万的白 无忧熊抱】</div>
+            <div class="ctrl">
+                <div class="jieqian"><img src="image/jieqian_btn.png" alt=""></div>
+                <div class="share"><img src="image/share_btn.png" alt=""></div>
+            </div>
+        </div>
+        <div class="jieqian_show">
+            <span class="jieqian_txt">虽然你今天的手气有点差，但是身上却隐隐有红线缠绕。没事去《神武4》一些人迹罕见的地图，可能会有意想不到的桃花缘降临哦？</span>
+            <div class="close_jieqian"></div>
+        </div>
+        <div class="fenxiang_show">
+            <div class="close_share"></div>
+        </div>
+        <div class="block_bg"></div>
+        <div class="page3_bottom">
+            <img class="people" src="image/people.gif" alt="">
+        </div>
+    </div>
 </div><!-- /#root -->
 
 
@@ -146,9 +169,66 @@
 <script src="./js/hammer.min.js"></script>
 <script src="./js/main.js?v=0.58"></script>
 
-<script src="http://wximg.qq.com/wxp/libs/wxmoment/0.0.4/wxmoment.min.js"></script>
 <script>
-var share = new WxMoment.Share();
+    // 初始化
+    // wx.config({
+    //     debug: false,
+    //     appId: 'wx9f3d61cb9c841299',
+    //     timestamp: '{$weixin.timestamp}',
+    //     nonceStr: '{$weixin.nonceStr}',
+    //     signature: '{$weixin.signature}',
+    //     jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+    // });
+
+    // // 处理分享
+    // wx.ready(function () {
+    //     // 在页面加载时就调用相关接口，如：分享到朋友圈、获取位置信息等接口
+    //     wx.checkJsApi({
+    //         jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline'],
+    //         success: function (res) {
+    //             if (res.errMsg == 'checkJsApi:ok') {
+    //                 // 分享给朋友
+    //                 wx.onMenuShareAppMessage({
+    //                     title: '{$vote_info.title}', // 分享标题
+    //                     desc: '{$vote_info.sub_title}', // 分享描述
+    //                     link: '{$share_url}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    //                     imgUrl: '{$vote_info.share_img}', // 分享图标
+    //                     type: '', // 分享类型,music、video或link，不填默认为link
+    //                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+    //                     // 用户取消已经监听不到了，不管取消与否，都是成功的
+    //                     success: function () {
+    //                         alert("恭喜你，分享成功");
+    //                     },
+    //                     // 用户取消分享后执行的回调函数
+    //                     cancel: function () {
+    //                         alert("取消分享");
+    //                     }
+    //                 });
+    //                 // 分享到朋友圈
+    //                 wx.onMenuShareTimeline({
+    //                     title: '{$vote_info.title}', // 分享时的标题
+    //                     link: '{$share_url}', // 分享时的链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    //                     imgUrl: '{$vote_info.share_img}', // 分享时显示的图标
+    //                     // 用户取消已经监听不到了，不管取消与否，都是成功的
+    //                     success: function () {
+    //                         alert("恭喜你，分享成功");
+    //                     },
+    //                     // 用户取消分享后执行的回调函数
+    //                     cancel: function () {
+    //                         alert("取消分享");
+    //                     }
+    //                 });
+    //             } else {
+    //                 alert("失败了.......");
+    //             }
+    //         }
+    //     });
+    // });
+
+    // // 初始化错误监听
+    // wx.error(function (res) {
+    //     alert("error");
+    // });
 </script>
 
 </body>

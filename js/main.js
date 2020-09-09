@@ -307,7 +307,7 @@ var page = {
 		console.log('init');
 
 		//测试用，去到哪页填哪页
-		// this.go2(1)
+		// this.go2(3)
 		// setTimeout(function(){
 		// 	self.go2(5)
 		// }, 2*1000)
@@ -348,7 +348,6 @@ var page = {
 	//下一页
 	next: function(cb){
 		var self = this
-
 		this.go2(self.current+1, cb)
 	}
 }
@@ -464,13 +463,25 @@ var main = {
 		});
 		$('.res_icon').on('click', function () {
 			if($(this).hasClass('go')){
-
+				self.creatRes();
 			}else{
 				$('.touzi_pause').show();
 				$('.touzi_play').hide();
 				page.go2(1);
 			}
-		})
+		});
+		$('.jieqian').on('click', function () {
+			self.showJieqian();
+		});
+		$('.close_jieqian').on('click', function () {
+			self.closeJieqian();
+		});
+		$('.share').on('click', function () {
+			self.showShare();
+		});
+		$('.close_share').on('click', function () {
+			self.closeShare();
+		});
 	},
 	palyTouzi: function () {
 		var self = this;
@@ -486,7 +497,8 @@ var main = {
 			if(self.num == '3'){
 				$('#res_title').html('扔出 3 点，哇了不起了不起！')
 				$('#res_content').html(self.eventtxt['0'].txt);
-				$('.video').attr('src', self.eventtxt['0'].url);
+				// $('.video').attr('src', self.eventtxt['0'].url);
+				self.setIframe(self.eventtxt['0'].url);
 				$('.res_bg').attr('src', 'image/res_bg2.gif');
 				$('.touzi_res_img').attr('src', `image/dian/${self.num}.png`);
 				$('.res_box .title').removeClass('fail').addClass('ok');
@@ -500,16 +512,14 @@ var main = {
 				}else {
 					var typeIndex = Math.floor(Math.random() * (typeUpper - 1 + 1)) + 1;
 					var type = self.event[self.num].type[typeIndex-1];
-					console.log('typeIndex----', typeIndex);
 					
 				}
 				var eventTxtIndex = '' + (self.typeVal[type] * Number(self.num));
-				console.log('type----', type);
-				console.log('eventTxtIndex----', self.eventtxt[eventTxtIndex]);
 				self.count++;
 				$('#res_title').html(`扔出 ${self.num} 点，进入${self.typeName[type]}格`)
 				$('#res_content').html(self.eventtxt[eventTxtIndex].txt);
-				$('.video').attr('src', self.eventtxt[eventTxtIndex].url);
+				// $('.video').attr('src', self.eventtxt[eventTxtIndex].url);
+				self.setIframe(self.eventtxt[eventTxtIndex].url);
 				$('.res_bg').attr('src', 'image/res_bg1.png');
 				$('.touzi_res_img').attr('src', `image/dian/${self.num}.png`);
 				$('.res_box .title').removeClass('ok').addClass('fail');
@@ -523,10 +533,61 @@ var main = {
 			// 惩罚格 5 chengfa 10
 			// 事件格 4 1 6 shijian 12, 3, 18
 			// 奖励格 2 6 jiangli 8, 24
-		}, 5)
+		}, 3000)
+	},
+	setIframe: function (url) {
+		var iframe_dom = `<iframe class="video" src="${url}" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>`;
+		$('.video_box').html(iframe_dom);
 	},
 	creatRes: function () {
-		
+		var self = this;
+		var count = self.count + 1;
+		var title, xinyunse, yi, chenghao, liwu, jieqian;
+		if( count <= 2){
+			title = 'ouqi';
+			xinyunse = '白\\蓝\\红';
+			yi = '诸事皆宜';
+			chenghao = '【欧皇】';
+			liwu = '【价值一千万的白无忧熊抱】';
+			jieqian = '今天你的欧气已经超越了以往的99%，做事大概率都能心想事成！说不定下一秒刚打开《神武4》的你，就能轻松洗出极品宝宝呢！';
+		} else if (count >= 3 && count <= 8) {
+			title = 'putong';
+			xinyunse = '橙\\青\\紫';
+			yi = '升官发财 打帮战 挖宝';
+			chenghao = '【亚洲之星】';
+			liwu = '【无】';
+			jieqian = '虽然今天的你运势不好不坏，但是只要努力终究还是能收获圆满滴。别着急，耐心等待，没准下一秒《神武4》就连换两本高必了~';
+		} else if(count >= 9) {
+			title = 'xuanxue';
+			xinyunse = '黑\\金\\粉';
+			yi = '撞桃花 肝日常 抓捕妖怪';
+			chenghao = '【非洲酋长】';
+			liwu = '【无】';
+			jieqian = '虽然你今天的手气有点差，但是身上却隐隐有红线缠绕。没事去《神武4》一些人迹罕见的地图，可能会有意想不到的桃花缘降临哦？';
+		}
+		$('.title_type').attr('src', `image/${title}.png`);
+		$('.xinyunse').html(xinyunse);
+		$('.yi').html(yi);
+		$('.chenghao').html(chenghao);
+		$('.liwu').html(liwu);
+		$('.jieqian_txt').html(jieqian);
+		page.go2(3);
+	},
+	showJieqian: function () {
+		$('.jieqian_show').show();
+		$('.block_bg').show();
+	},
+	closeJieqian: function () {
+		$('.jieqian_show').hide();
+		$('.block_bg').hide();
+	},
+	showShare: function () {
+		$('.fenxiang_show').show();
+		$('.block_bg').show();
+	},
+	closeShare: function () {
+		$('.fenxiang_show').hide();
+		$('.block_bg').hide();
 	},
 	initModel: function () {
 		var hasShowModel = localStorage.getItem('ouhuang_model');
