@@ -171,64 +171,84 @@
 
 <script>
     // 初始化
-    // wx.config({
-    //     debug: false,
-    //     appId: 'wx9f3d61cb9c841299',
-    //     timestamp: '{$weixin.timestamp}',
-    //     nonceStr: '{$weixin.nonceStr}',
-    //     signature: '{$weixin.signature}',
-    //     jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    // });
+    var link = location.href.split('#')[0];
+    $.ajax({
+    　　url: "https://sw.it2048.cn/sdk/",//后台给你提供的接口
+    　　type: "get",
+        data: {
+            'url': link
+        },
+    　　async: false,
+    　　contentType: "application/json; charset=utf-8",
+    　　dataType: "json",
+    　　success: function (data) {
+    　　　　wx.config({
+    　　　　　　debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来
+    　　　　　　appId: data.appid, // 必填，公众号的唯一标识
+    　　　　　　timestamp: data.timestamp, // 必填，生成签名的时间戳
+    　　　　　　nonceStr: data.noncestr, // 必填，生成签名的随机串
+    　　　　　　signature: data.signature,// 必填，签名，见附录1
+    　　　　　　jsApiList: [
+    　　　　　　　　'onMenuShareAppMessage', 'onMenuShareTimeline'
+    　　　　　　] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    　　　　});
+    　　}
+    });
 
-    // // 处理分享
-    // wx.ready(function () {
-    //     // 在页面加载时就调用相关接口，如：分享到朋友圈、获取位置信息等接口
-    //     wx.checkJsApi({
-    //         jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline'],
-    //         success: function (res) {
-    //             if (res.errMsg == 'checkJsApi:ok') {
-    //                 // 分享给朋友
-    //                 wx.onMenuShareAppMessage({
-    //                     title: '{$vote_info.title}', // 分享标题
-    //                     desc: '{$vote_info.sub_title}', // 分享描述
-    //                     link: '{$share_url}', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-    //                     imgUrl: '{$vote_info.share_img}', // 分享图标
-    //                     type: '', // 分享类型,music、video或link，不填默认为link
-    //                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-    //                     // 用户取消已经监听不到了，不管取消与否，都是成功的
-    //                     success: function () {
-    //                         alert("恭喜你，分享成功");
-    //                     },
-    //                     // 用户取消分享后执行的回调函数
-    //                     cancel: function () {
-    //                         alert("取消分享");
-    //                     }
-    //                 });
-    //                 // 分享到朋友圈
-    //                 wx.onMenuShareTimeline({
-    //                     title: '{$vote_info.title}', // 分享时的标题
-    //                     link: '{$share_url}', // 分享时的链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-    //                     imgUrl: '{$vote_info.share_img}', // 分享时显示的图标
-    //                     // 用户取消已经监听不到了，不管取消与否，都是成功的
-    //                     success: function () {
-    //                         alert("恭喜你，分享成功");
-    //                     },
-    //                     // 用户取消分享后执行的回调函数
-    //                     cancel: function () {
-    //                         alert("取消分享");
-    //                     }
-    //                 });
-    //             } else {
-    //                 alert("失败了.......");
-    //             }
-    //         }
-    //     });
-    // });
+    // 处理分享
+    wx.ready(function () {
+        // 在页面加载时就调用相关接口，如：分享到朋友圈、获取位置信息等接口
+        wx.checkJsApi({
+            jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline'],
+            success: function (res) {
+                if (res.errMsg == 'checkJsApi:ok') {
+                    // 分享给朋友
+                    var title = '【神武4真好玩】目标是成为真正的欧皇！';
+                    var desc = '【神武4真好玩】目标是成为真正的欧皇！';
+                    var img = 'https://sw.it2048.cn/wx.png';
+                    var url = 'https://sw.it2048.cn';
+                    wx.onMenuShareAppMessage({
+                        title: title, // 分享标题
+                        desc: desc, // 分享描述
+                        link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: img, // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        // 用户取消已经监听不到了，不管取消与否，都是成功的
+                        success: function () {
+                            alert("恭喜你，分享成功");
+                        },
+                        // 用户取消分享后执行的回调函数
+                        cancel: function () {
+                            alert("取消分享");
+                        }
+                    });
+                    // 分享到朋友圈
+                    wx.onMenuShareTimeline({
+                        title: title, // 分享时的标题
+                        desc: desc, // 分享描述
+                        link: url, // 分享时的链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: img, // 分享时显示的图标
+                        // 用户取消已经监听不到了，不管取消与否，都是成功的
+                        success: function () {
+                            alert("恭喜你，分享成功");
+                        },
+                        // 用户取消分享后执行的回调函数
+                        cancel: function () {
+                            alert("取消分享");
+                        }
+                    });
+                } else {
+                    alert("失败了.......");
+                }
+            }
+        });
+    });
 
-    // // 初始化错误监听
-    // wx.error(function (res) {
-    //     alert("error");
-    // });
+    // 初始化错误监听
+    wx.error(function (res) {
+        alert("error");
+    });
 </script>
 
 </body>
